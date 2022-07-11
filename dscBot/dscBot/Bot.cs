@@ -17,7 +17,7 @@ namespace dscBot
         {
             var conf = new DiscordConfiguration
             {
-                Token = "OTk2MTU0OTEwOTg5MDk5MDA5.GeEaKi.XdaOULrJoSPSrlH5hcyjolFlHzM-ADS-A0axNM",
+                Token = "######",
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 
