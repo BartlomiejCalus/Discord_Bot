@@ -19,7 +19,11 @@ namespace dscBot
         {
             var conf = new DiscordConfiguration
             {
+<<<<<<< HEAD
                 Token = "OTk2MTU0OTEwOTg5MDk5MDA5.GAqE6G.hyWBuxeu3kk6x3vxS38gfQTXbNFotsqBAjNAno",
+=======
+                Token = "######",
+>>>>>>> 066ef8c6907a4430e8690b356bc6b5252dff708f
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 
