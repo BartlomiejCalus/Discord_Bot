@@ -22,19 +22,34 @@ namespace dscBot
         }
 
         [Command("join")]
+        [Description("used to join voice cannel")]
         public async Task join (CommandContext ctx)
         {
-            DiscordChannel channel;
 
             var voice = ctx.Client.GetVoiceNext();
+            var chConnetcted = voice.GetConnection(ctx.Guild);
             var voiceStat = ctx.Member?.VoiceState;
 
-            if(voiceStat?.Channel != null)
+            if (chConnetcted != null && chConnetcted.TargetChannel != voiceStat?.Channel)
             {
-                channel = voiceStat.Channel;
-                await voice.ConnectAsync(channel).ConfigureAwait(false);
+                chConnetcted.Disconnect();
+            }
+
+            if (voiceStat?.Channel != null)
+            {
+                await voice.ConnectAsync(voiceStat.Channel).ConfigureAwait(false);
             }
             
+        }
+
+        [Command("leave")]
+        [Description("used to leave voice cannel")]
+        public async Task leave (CommandContext ctx)
+        {
+            var chConnetcted = ctx.Client.GetVoiceNext()
+                .GetConnection(ctx.Guild);
+
+            if (chConnetcted != null) chConnetcted.Disconnect();
         }
 
     }
