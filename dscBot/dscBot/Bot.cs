@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DSharpPlus;
 using DSharpPlus.EventArgs;
 using DSharpPlus.CommandsNext;
+using DSharpPlus.VoiceNext;
 
 namespace dscBot
 {
@@ -13,18 +14,16 @@ namespace dscBot
     {
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
-        public async Task RunA() 
+        public VoiceNextExtension voice {get; private set; }
+    public async Task RunA() 
         {
             var conf = new DiscordConfiguration
             {
-                Token = "OTk2MTU0OTEwOTg5MDk5MDA5.GeEaKi.XdaOULrJoSPSrlH5hcyjolFlHzM-ADS-A0axNM",
+                Token = "OTk2MTU0OTEwOTg5MDk5MDA5.GAqE6G.hyWBuxeu3kk6x3vxS38gfQTXbNFotsqBAjNAno",
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 
             };
-
-            Client = new DiscordClient(conf);
-            Client.Ready += OnClientReady;
 
             var commandsConf = new CommandsNextConfiguration
             {
@@ -32,7 +31,15 @@ namespace dscBot
                 EnableDms = false
                 
             };
+
+            Client = new DiscordClient(conf);
+            Client.Ready += OnClientReady;
+
             Commands = Client.UseCommandsNext(commandsConf);
+
+            Commands.RegisterCommands<MyCommands>();
+
+            voice = Client.UseVoiceNext();
 
             await Client.ConnectAsync();
 

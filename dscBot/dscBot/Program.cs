@@ -6,9 +6,14 @@ namespace dscBot
     {
         static void Main(string[] args)
         {
-            var bot = new Bot();
-            bot.RunA().GetAwaiter().GetResult();
-            
+            try
+            {
+                var bot = new Bot();
+                bot.RunA().GetAwaiter().GetResult();
+            }catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
     }
 }
