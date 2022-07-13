@@ -7,6 +7,8 @@ using DSharpPlus;
 using DSharpPlus.EventArgs;
 using DSharpPlus.CommandsNext;
 using DSharpPlus.VoiceNext;
+using DSharpPlus.Lavalink;
+using DSharpPlus.Net;
 
 namespace dscBot
 {
@@ -15,11 +17,12 @@ namespace dscBot
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
         public VoiceNextExtension voice {get; private set; }
+        
     public async Task RunA() 
         {
             var conf = new DiscordConfiguration
             {
-                Token = "OTk2MTU0OTEwOTg5MDk5MDA5.Gvf-6k.7P4ERvecSrZuNOKali6NDxwKzch52-Vx36BN5w",
+                Token = "OTk2MTU0OTEwOTg5MDk5MDA5.GzqlbE.rjT0XddsmOJBCUzvaRUc3bt2HYZmrgPuIl5WQQ",
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 
@@ -32,16 +35,35 @@ namespace dscBot
                 
             };
 
+            var endPoint = new ConnectionEndpoint
+            {
+                Hostname = "127.0.0.1",
+                Port = 2332
+            };
+
+            var lavaConf = new LavalinkConfiguration
+            {
+                Password = "youshallnotpass",
+                RestEndpoint = endPoint,
+                SocketEndpoint = endPoint
+            };
+
             Client = new DiscordClient(conf);
+            
             Client.Ready += OnClientReady;
 
             Commands = Client.UseCommandsNext(commandsConf);
 
             Commands.RegisterCommands<MyCommands>();
+            Commands.RegisterCommands<MusicCommands>();
 
             voice = Client.UseVoiceNext();
 
+            var lavaLink = Client.UseLavalink();
+
             await Client.ConnectAsync();
+
+            await lavaLink.ConnectAsync(lavaConf);
 
             await Task.Delay(-1);
         }
