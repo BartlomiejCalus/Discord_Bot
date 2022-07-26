@@ -17,11 +17,14 @@ namespace dscBot
     
     public class MusicCommands : BaseCommandModule
     {
-        
 
         [Command("play")]
         public async Task Play(CommandContext ctx, Uri url)
         {
+            
+
+            
+
             if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
             {
                 return;
@@ -30,6 +33,7 @@ namespace dscBot
             var lava = ctx.Client.GetLavalink();
             var node = lava.ConnectedNodes.Values.First();
             var conn = node.GetGuildConnection(ctx.Member.VoiceState.Guild);
+
 
             if (conn == null)   //jeśli bot nie jest połączony
             {  
@@ -40,7 +44,7 @@ namespace dscBot
                 await ctx.RespondAsync("Bot jest na innym kanale").ConfigureAwait(false);
                 return;
             }
-
+            
 
             var loadResult = await node.Rest.GetTracksAsync(url).ConfigureAwait(false);
 
@@ -55,12 +59,36 @@ namespace dscBot
                 return;
             }
 
-            if()
-            var track = loadResult.Tracks.First();
-            
-            await conn.PlayAsync(track).ConfigureAwait(false);
+            var listTracks = loadResult.Tracks.ToList();
 
-            await ctx.RespondAsync($"Właśnie słuchamy \n{track.Title}!").ConfigureAwait(false);
+            var tracks = loadResult.LoadResultType == LavalinkLoadResultType.PlaylistLoaded
+                ? listTracks
+                : listTracks.Take(Math.Min(10, listTracks.Count)).ToList();
+
+            foreach (var track in tracks) MyQueue.addTruck(track);
+
+            
+                if (conn.CurrentState.CurrentTrack == null)
+                {
+                    for (int i = 0; i < MyQueue.it(); ++i)
+                    {
+                        var song = MyQueue.getTruck();
+                        if (song != null)
+                        {
+                            await conn.PlayAsync(song).ConfigureAwait(false);
+                            await ctx.RespondAsync($"Właśnie słuchamy \n{song.Title}!").ConfigureAwait(false);
+                        }
+                    
+                    }
+                }
+                else
+                {
+                    await ctx.RespondAsync(MyQueue.playList()).ConfigureAwait(false);
+
+                }
+
+            
+
         }
 
         [Command("leave")]
@@ -72,6 +100,27 @@ namespace dscBot
 
             if(conn != null) 
                 await conn.DisconnectAsync().ConfigureAwait(false);
+        }
+
+        [Command("next")]
+        public async Task GetNext(CommandContext ctx)
+        {
+            var conn = ctx.Client.GetLavalink()
+                .ConnectedNodes.Values.First()
+                .GetGuildConnection(ctx.Channel.Guild);
+
+            if (conn != null)
+                await conn.PlayAsync(MyQueue.getTruck()).ConfigureAwait(false);
+        }
+        [Command("queue")]
+        public async Task PlayList(CommandContext ctx)
+        {
+            var conn = ctx.Client.GetLavalink()
+                .ConnectedNodes.Values.First()
+                .GetGuildConnection(ctx.Channel.Guild);
+
+            if (conn != null)
+                await conn.Channel.SendMessageAsync(MyQueue.playList());
         }
     }
 }
