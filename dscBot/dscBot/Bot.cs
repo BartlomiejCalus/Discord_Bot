@@ -9,6 +9,8 @@ using DSharpPlus.CommandsNext;
 using DSharpPlus.VoiceNext;
 using DSharpPlus.Lavalink;
 using DSharpPlus.Net;
+using DSharpPlus.Interactivity;
+using DSharpPlus.Interactivity.Extensions;
 
 namespace dscBot
 {
@@ -17,12 +19,14 @@ namespace dscBot
         public DiscordClient Client { get; private set; }
         public CommandsNextExtension Commands { get; private set; }
         public VoiceNextExtension voice {get; private set; }
+
+        public InteractivityExtension Interactivity { get; private set; }
         
     public async Task RunA() 
         {
             var conf = new DiscordConfiguration
             {
-                Token = "####",
+                Token = "OTk2MTU0OTEwOTg5MDk5MDA5#Gi4J3W.Gc2PI9ozoudDrFYPtDWbXp-VYjLdTuox7OqXNo",
                 TokenType = TokenType.Bot,
                 AutoReconnect = true,
                 
@@ -30,7 +34,7 @@ namespace dscBot
 
             var commandsConf = new CommandsNextConfiguration
             {
-                StringPrefixes = new string[] { "%" },
+                StringPrefixes = StClass.prefixTab,
                 EnableDms = false
                 
             };
@@ -51,6 +55,8 @@ namespace dscBot
             Client = new DiscordClient(conf);
             
             Client.Ready += OnClientReady;
+
+            Client.UseInteractivity(new InteractivityConfiguration());
 
             Commands = Client.UseCommandsNext(commandsConf);
 

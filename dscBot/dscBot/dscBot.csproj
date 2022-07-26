@@ -13,6 +13,7 @@
     <PackageReference Include="DSharpPlus.Interactivity" Version="4.2.0" />
     <PackageReference Include="DSharpPlus.Lavalink" Version="4.2.0" />
     <PackageReference Include="DSharpPlus.VoiceNext" Version="4.2.0" />
+    <PackageReference Include="HSNXT.DSharpPlus.ModernEmbedBuilder" Version="3.0.198" />
   </ItemGroup>
 
 </Project>

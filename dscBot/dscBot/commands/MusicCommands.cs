@@ -21,9 +21,11 @@ namespace dscBot
         [Command("play")]
         public async Task Play(CommandContext ctx, Uri url)
         {
-            
 
-            
+            if (ctx.Channel.Name != "testy")
+            {
+                return;
+            }
 
             if (ctx.Member.VoiceState == null || ctx.Member.VoiceState.Channel == null)
             {
@@ -94,6 +96,12 @@ namespace dscBot
         [Command("leave")]
         public async Task Leave(CommandContext ctx)
         {
+
+            if (ctx.Channel.Name != "testy")
+            {
+                return;
+            }
+
             var conn = ctx.Client.GetLavalink()
                 .ConnectedNodes.Values.First()
                 .GetGuildConnection(ctx.Channel.Guild);
@@ -105,6 +113,12 @@ namespace dscBot
         [Command("next")]
         public async Task GetNext(CommandContext ctx)
         {
+
+            if (ctx.Channel.Name != "testy")
+            {
+                return;
+            }
+
             var conn = ctx.Client.GetLavalink()
                 .ConnectedNodes.Values.First()
                 .GetGuildConnection(ctx.Channel.Guild);
@@ -115,6 +129,12 @@ namespace dscBot
         [Command("queue")]
         public async Task PlayList(CommandContext ctx)
         {
+
+            if (ctx.Channel.Name != "testy")
+            {
+                return;
+            }
+
             var conn = ctx.Client.GetLavalink()
                 .ConnectedNodes.Values.First()
                 .GetGuildConnection(ctx.Channel.Guild);
